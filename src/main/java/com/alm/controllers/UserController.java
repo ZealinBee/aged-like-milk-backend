@@ -4,10 +4,9 @@ import com.alm.dtos.users.CreateUserDTO;
 import com.alm.dtos.users.GetUserDTO;
 import com.alm.services.abstractions.IUserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/users")
@@ -18,8 +17,11 @@ public class UserController {
         this.userService = userService;
     }
 
-
-    @PostMapping("")
+    @GetMapping
+    public List<GetUserDTO> findAllUsers() {
+        return userService.findAllUsers();
+    }
+    @PostMapping
     public GetUserDTO registerUser(@RequestBody CreateUserDTO createUserDTO) {
         return userService.registerUser(createUserDTO);
     }

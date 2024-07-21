@@ -3,14 +3,15 @@ package com.alm.services.implementations;
 import com.alm.dtos.users.CreateUserDTO;
 import com.alm.dtos.users.GetUserDTO;
 import com.alm.entities.Role;
-import com.alm.entities.User;
 import com.alm.mappers.UserMapper;
 import com.alm.repositories.UserRepo;
+import com.alm.entities.User;
 import com.alm.services.abstractions.IUserService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 public class UserService implements IUserService {
     private final UserRepo userRepo;
@@ -22,7 +23,11 @@ public class UserService implements IUserService {
     }
 
     public List<GetUserDTO> findAllUsers() {
-        return null;
+        List<User> users = userRepo.findAll();
+        return users.stream()
+                .map(user -> {
+                    return userMapper.userToUserDTO(user);
+                }).collect(Collectors.toList());
     }
 
     public GetUserDTO registerUser(CreateUserDTO createUserDTO) {

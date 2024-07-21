@@ -2,9 +2,16 @@ package com.alm.entities;
 
 import jakarta.persistence.*;
 
+import java.util.UUID;
+
 @Entity
 @Table(name = "users")
 public class User extends BaseEntity {
+    @Id
+    @GeneratedValue(generator = "uuid2")
+    @Column(columnDefinition = "uuid", updatable = false, nullable = false)
+    private UUID id;
+
     @Column(nullable = false)
     private String email;
 
@@ -17,7 +24,8 @@ public class User extends BaseEntity {
     @Enumerated(EnumType.ORDINAL)
     private Role role;
 
-    public User(String email, String username, String password, Role role) {
+    public User(UUID id, String email, String username, String password, Role role) {
+        this.id = id;
         this.email = email;
         this.username = username;
         this.password = password;
@@ -27,12 +35,16 @@ public class User extends BaseEntity {
     public User() {
     }
 
-    public static UserBuilder builder() {
-        return new UserBuilder();
+    public UUID getId() {
+        return this.id;
     }
 
     public String getEmail() {
         return this.email;
+    }
+
+    public String getUsername() {
+        return this.username;
     }
 
     public String getPassword() {
@@ -41,6 +53,10 @@ public class User extends BaseEntity {
 
     public Role getRole() {
         return this.role;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
     }
 
     public void setEmail(String email) {
@@ -57,48 +73,6 @@ public class User extends BaseEntity {
 
     public void setRole(Role role) {
         this.role = role;
-    }
-
-    public String getUsername() {
-        return this.username;
-    }
-
-    public static class UserBuilder {
-        private String email;
-        private String username;
-        private String password;
-        private Role role;
-
-        UserBuilder() {
-        }
-
-        public UserBuilder email(String email) {
-            this.email = email;
-            return this;
-        }
-
-        public UserBuilder username(String username) {
-            this.username = username;
-            return this;
-        }
-
-        public UserBuilder password(String password) {
-            this.password = password;
-            return this;
-        }
-
-        public UserBuilder role(Role role) {
-            this.role = role;
-            return this;
-        }
-
-        public User build() {
-            return new User(this.email, this.username, this.password, this.role);
-        }
-
-        public String toString() {
-            return "User.UserBuilder(email=" + this.email + ", username=" + this.username + ", password=" + this.password + ", role=" + this.role + ")";
-        }
     }
 }
 
