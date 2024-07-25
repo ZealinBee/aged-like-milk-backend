@@ -1,12 +1,15 @@
 package com.alm.entities;
 
 import jakarta.persistence.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.Collection;
 import java.util.UUID;
 
 @Entity
 @Table(name = "users")
-public class User extends BaseEntity {
+public class User extends BaseEntity implements UserDetails {
     @Id
     @GeneratedValue(generator = "uuid2")
     @Column(columnDefinition = "uuid", updatable = false, nullable = false)
@@ -45,6 +48,11 @@ public class User extends BaseEntity {
 
     public String getUsername() {
         return this.username;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return null;
     }
 
     public String getPassword() {

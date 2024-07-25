@@ -4,10 +4,12 @@ import com.alm.dtos.posts.CreatePostDTO;
 import com.alm.entities.Category;
 import com.alm.entities.Post;
 import com.alm.entities.User;
+import com.alm.exceptions.CustomRunTimeException;
 import com.alm.repositories.CategoryRepo;
 import com.alm.repositories.PostRepo;
 import com.alm.repositories.UserRepo;
 import com.alm.services.abstractions.IPostService;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
@@ -35,7 +37,8 @@ public class PostService implements IPostService {
     }
 
     public Category validateCategory(UUID categoryId) {
-        return categoryRepo.findOneById(categoryId);
+        return categoryRepo.findOneById(categoryId)
+                .orElseThrow(() -> new CustomRunTimeException("404", HttpStatus.NOT_FOUND, "The category ID doesn't exist"));
     }
 
     public User validateUser(UUID userId) {

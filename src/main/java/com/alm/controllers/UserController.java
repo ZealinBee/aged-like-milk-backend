@@ -4,6 +4,7 @@ import com.alm.dtos.users.CreateUserDTO;
 import com.alm.dtos.users.GetUserDTO;
 import com.alm.services.abstractions.IUserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,11 +19,14 @@ public class UserController {
     }
 
     @GetMapping
-    public List<GetUserDTO> findAllUsers() {
-        return userService.findAllUsers();
+    public ResponseEntity<List<GetUserDTO>> findAllUsers() {
+        var users = userService.findAllUsers();
+        return ResponseEntity.ok(users);
     }
+
     @PostMapping
-    public GetUserDTO registerUser(@RequestBody CreateUserDTO createUserDTO) {
-        return userService.registerUser(createUserDTO);
+    public ResponseEntity<GetUserDTO> registerUser(@RequestBody CreateUserDTO createUserDTO) {
+        var user = userService.registerUser(createUserDTO);
+        return ResponseEntity.ok(user);
     }
 }
