@@ -10,6 +10,8 @@ import com.alm.entities.User;
 import com.alm.mappers.UserMapper;
 import com.alm.repositories.UserRepo;
 import com.alm.services.abstractions.IAuthService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -32,9 +34,12 @@ public class AuthService implements IAuthService {
     }
 
     public GetUserDTO register(RegisterDTO registerDTO) {
+        if (userRepo.findOneByEmail(registerDTO.getEmail()).isPresent()) {
+            throw new IllegalArgumentException("Email already in use");
+        }
+
         User newUser = new User();
         newUser.setRole(Role.USER);
-        newUser.setUsername(registerDTO.getUsername());
         var encodedPassword = passwordEncoder.encode(registerDTO.password);
         newUser.setPassword(encodedPassword);
         newUser.setEmail(registerDTO.getEmail());
@@ -43,14 +48,16 @@ public class AuthService implements IAuthService {
         return userMapper.userToUserDTO(newUser);
     }
 
-    public TokensDTO login(LoginDTO loginDTO) {
+    public TokensDTO login(LoginDTO loginDTO) throws Exception {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
                 loginDTO.getEmail(),
                 loginDTO.getPassword()
         ));
-        var user = userRepo.findOneByEmail(loginDTO.getEmail()).orElseThrow();
+
+        var user = userRepo.findOneByEmail(loginDTO.getEmail()).orElseThrow(() -> new Exception("User not found"));
         var tokens = new TokensDTO();
         tokens.accessToken = jwtService.generateToken(user);
         return tokens;
     }
+
 }

@@ -17,21 +17,20 @@ import java.util.function.Function;
 @Service
 public class JwtService {
     private static final String SECRET_KEY = System.getenv("jwt_key");
-    public String extractEmail(String jwtToken) {
-        return extractClaim(jwtToken, Claims::getSubject);
+    private Claims extractAllClaims(String jwtToken) {
+        return Jwts.parserBuilder()
+                .setSigningKey(getSigningKey())
+                .build()
+                .parseClaimsJws(jwtToken)
+                .getBody();
     }
-
     public <T> T extractClaim(String token, Function<Claims, T>claimsResolver) {
         final Claims claims = extractAllClaims(token);
         return claimsResolver.apply(claims);
     }
 
-    private Claims extractAllClaims(String jwtToken) {
-        return Jwts.parserBuilder()
-                .setSigningKey(getSigningKey())
-                .build()
-                .parseClaimsJwt(jwtToken)
-                .getBody();
+    public String extractEmail(String jwtToken) {
+        return extractClaim(jwtToken, Claims::getSubject);
     }
 
     public String generateToken(UserDetails userDetails) {
@@ -43,7 +42,7 @@ public class JwtService {
                 .setClaims(extraClaims)
                 .setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 *24))
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 *2400))
                 .signWith(getSigningKey(), SignatureAlgorithm.HS256)
                 .compact();
     }

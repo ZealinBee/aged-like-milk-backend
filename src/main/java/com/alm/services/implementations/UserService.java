@@ -33,7 +33,6 @@ public class UserService implements IUserService {
     public GetUserDTO registerUser(CreateUserDTO createUserDTO) {
         User newUser = new User();
         newUser.setRole(Role.USER);
-        newUser.setUsername(createUserDTO.getUsername());
         newUser.setPassword(createUserDTO.getPassword());
         newUser.setEmail(createUserDTO.getEmail());
         userRepo.save(newUser);

@@ -7,5 +7,5 @@ import com.alm.dtos.users.GetUserDTO;
 
 public interface IAuthService {
     GetUserDTO register(RegisterDTO registerDTO);
-    TokensDTO login(LoginDTO loginDTO);
+    TokensDTO login(LoginDTO loginDTO) throws Exception;
 }

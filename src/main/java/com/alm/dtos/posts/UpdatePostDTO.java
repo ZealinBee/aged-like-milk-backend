@@ -2,13 +2,12 @@ package com.alm.dtos.posts;
 
 import java.util.UUID;
 
-public class CreatePostDTO {
+public class UpdatePostDTO {
     private String title;
     private String content;
     private UUID categoryId;
-    private UUID userId;
 
-    public CreatePostDTO() {
+    public UpdatePostDTO() {
     }
 
     public String getTitle() {
@@ -19,6 +18,10 @@ public class CreatePostDTO {
         return this.content;
     }
 
+    public UUID getCategoryId() {
+        return this.categoryId;
+    }
+
     public void setTitle(String title) {
         this.title = title;
     }
@@ -27,10 +30,14 @@ public class CreatePostDTO {
         this.content = content;
     }
 
+    public void setCategoryId(UUID categoryId) {
+        this.categoryId = categoryId;
+    }
+
     public boolean equals(final Object o) {
         if (o == this) return true;
-        if (!(o instanceof CreatePostDTO)) return false;
-        final CreatePostDTO other = (CreatePostDTO) o;
+        if (!(o instanceof UpdatePostDTO)) return false;
+        final UpdatePostDTO other = (UpdatePostDTO) o;
         if (!other.canEqual((Object) this)) return false;
         final Object this$title = this.getTitle();
         final Object other$title = other.getTitle();
@@ -38,11 +45,15 @@ public class CreatePostDTO {
         final Object this$content = this.getContent();
         final Object other$content = other.getContent();
         if (this$content == null ? other$content != null : !this$content.equals(other$content)) return false;
+        final Object this$categoryId = this.getCategoryId();
+        final Object other$categoryId = other.getCategoryId();
+        if (this$categoryId == null ? other$categoryId != null : !this$categoryId.equals(other$categoryId))
+            return false;
         return true;
     }
 
     protected boolean canEqual(final Object other) {
-        return other instanceof CreatePostDTO;
+        return other instanceof UpdatePostDTO;
     }
 
     public int hashCode() {
@@ -52,26 +63,12 @@ public class CreatePostDTO {
         result = result * PRIME + ($title == null ? 43 : $title.hashCode());
         final Object $content = this.getContent();
         result = result * PRIME + ($content == null ? 43 : $content.hashCode());
+        final Object $categoryId = this.getCategoryId();
+        result = result * PRIME + ($categoryId == null ? 43 : $categoryId.hashCode());
         return result;
     }
 
     public String toString() {
-        return "CreatePostDTO(title=" + this.getTitle() + ", content=" + this.getContent() + ")";
-    }
-
-    public UUID getCategoryId() {
-        return this.categoryId;
-    }
-
-    public UUID getUserId() {
-        return this.userId;
-    }
-
-    public void setCategoryId(UUID categoryId) {
-        this.categoryId = categoryId;
-    }
-
-    public void setUserId(UUID userId) {
-        this.userId = userId;
+        return "UpdatePostDTO(title=" + this.getTitle() + ", content=" + this.getContent() + ", categoryId=" + this.getCategoryId() + ")";
     }
 }
