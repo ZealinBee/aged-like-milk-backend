@@ -8,8 +8,8 @@ import org.springframework.web.context.request.WebRequest;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
-    @ExceptionHandler(CustomRunTimeException.class)
-    public ResponseEntity<Object> handler(CustomRunTimeException e, HttpRequest req) {
-        return new ResponseEntity<>(e.getMessage(), e.getHttpStatus());
-    }
+        @ExceptionHandler(value = CustomRunTimeException.class)
+        public ResponseEntity<Object> handler(CustomRunTimeException e, WebRequest req) {
+            return new ResponseEntity<>(e.getMessage(), e.getHttpStatus());
+        }
 }

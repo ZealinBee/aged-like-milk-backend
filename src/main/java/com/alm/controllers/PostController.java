@@ -1,5 +1,6 @@
 package com.alm.controllers;
 
+import com.alm.dtos.paginations.PostsPaginationDTO;
 import com.alm.dtos.posts.PostDTO;
 import com.alm.dtos.posts.UpdatePostDTO;
 import com.alm.entities.Post;
@@ -29,8 +30,11 @@ public class PostController {
     }
 
     @GetMapping
-    public ResponseEntity<List<PostDTO>> findAllPosts() {
-        return ResponseEntity.ok(postService.findAllPosts());
+    public ResponseEntity<PostsPaginationDTO> findAllPosts(
+            @RequestParam(value = "page", defaultValue = "0") int page,
+            @RequestParam(value = "size", defaultValue = "10") int size
+    ) {
+        return ResponseEntity.ok(postService.findAllPosts(page, size));
     }
 
     @GetMapping("/{postId}")

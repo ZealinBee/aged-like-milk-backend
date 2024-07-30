@@ -1,5 +1,6 @@
 package com.alm.services.implementations;
 
+import com.alm.dtos.paginations.PostsPaginationDTO;
 import com.alm.dtos.posts.PostDTO;
 import com.alm.dtos.posts.UpdatePostDTO;
 import com.alm.entities.Category;
@@ -11,6 +12,9 @@ import com.alm.repositories.CategoryRepo;
 import com.alm.repositories.PostRepo;
 import com.alm.repositories.UserRepo;
 import com.alm.services.abstractions.IPostService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -49,11 +53,22 @@ public class PostService implements IPostService {
     }
 
     @Override
-    public List<PostDTO> findAllPosts() {
-        List<Post> posts = postRepo.findAll();
-        return posts.stream()
+    public PostsPaginationDTO findAllPosts(int pageNumber, int pageSize) {
+        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+        Page<Post> posts = postRepo.findAll(pageable);
+        List<Post> postsList = posts.getContent();
+        List<PostDTO> mappedPosts =  postsList.stream()
                 .map(postMapper::postToPostDTO)
-                .collect(Collectors.toList());
+                .toList();
+
+        return new PostsPaginationDTO(
+                posts.getNumber(),
+                posts.getSize(),
+                posts.getTotalPages(),
+                posts.getTotalElements(),
+                posts.isLast(),
+                mappedPosts
+        );
     }
 
     @Override
@@ -64,9 +79,8 @@ public class PostService implements IPostService {
     }
 
     @Override
-    public boolean deletePostById(UUID postId) {
+    public void deletePostById(UUID postId) {
         postRepo.deleteById(postId);
-        return true;
     }
 
     @Override

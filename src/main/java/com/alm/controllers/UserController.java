@@ -1,5 +1,6 @@
 package com.alm.controllers;
 
+import com.alm.dtos.paginations.UsersPaginationDTO;
 import com.alm.dtos.users.CreateUserDTO;
 import com.alm.dtos.users.GetUserDTO;
 import com.alm.services.abstractions.IUserService;
@@ -20,8 +21,11 @@ public class UserController {
     }
 
     @GetMapping
-    public ResponseEntity<List<GetUserDTO>> findAllUsers() {
-        var users = userService.findAllUsers();
+    public ResponseEntity<UsersPaginationDTO> findAllUsers(
+            @RequestParam(value = "pageNumber", required = false, defaultValue = "0") int pageNumber,
+            @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize
+    ) {
+        UsersPaginationDTO users = userService.findAllUsers(pageNumber, pageSize);
         return ResponseEntity.ok(users);
     }
 
