@@ -35,16 +35,18 @@ public class CategoryController {
         return categoryService.findCategoryById(categoryId);
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping
     public ResponseEntity<?> createCategory(@RequestBody Category category) {
         return ResponseEntity.ok(categoryService.createCategory(category));
     }
-
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PutMapping("/{categoryId}")
     public ResponseEntity<?> updateCategoryById(@PathVariable UUID categoryId, @RequestBody Category category) {
         return ResponseEntity.ok(categoryService.updateCategoryById(categoryId, category));
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping("/{categoryId}")
     public ResponseEntity<?> deleteCategoryById(@PathVariable UUID categoryId) {
         categoryService.deleteCategoryById(categoryId);

@@ -6,6 +6,7 @@ import com.alm.dtos.users.GetUserDTO;
 import com.alm.services.abstractions.IUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,6 +21,7 @@ public class UserController {
         this.userService = userService;
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping
     public ResponseEntity<UsersPaginationDTO> findAllUsers(
             @RequestParam(value = "pageNumber", required = false, defaultValue = "0") int pageNumber,
@@ -28,19 +30,19 @@ public class UserController {
         UsersPaginationDTO users = userService.findAllUsers(pageNumber, pageSize);
         return ResponseEntity.ok(users);
     }
-
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/{userId}")
     public ResponseEntity<GetUserDTO> findUserById(@PathVariable UUID userId) {
         var user = userService.findUserById(userId);
         return ResponseEntity.ok(user);
     }
-
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PutMapping("/{userId}")
     public ResponseEntity<GetUserDTO> updateUser(@PathVariable UUID userId, @RequestBody CreateUserDTO createUserDTO) {
         var user = userService.updateUser(userId, createUserDTO);
         return ResponseEntity.ok(user);
     }
-
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping("/{userId}")
     public ResponseEntity<Void> deleteUser(@PathVariable UUID userId) {
         userService.deleteUser(userId);
