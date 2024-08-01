@@ -24,7 +24,7 @@ public class PostController {
         this.postService = postService;
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN', 'ROLE_WRITER')")
+    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_WRITER')")
     @PostMapping
     public ResponseEntity<PostDTO> createPost(@RequestBody PostDTO postDTO) {
         var post = postService.createPost(postDTO);
@@ -43,13 +43,13 @@ public class PostController {
     public ResponseEntity<PostDTO> findPostById(@PathVariable(value = "postId") UUID postId) {
         return ResponseEntity.ok(postService.findPostById(postId));
     }
-    @PreAuthorize("hasRole('ROLE_ADMIN', 'ROLE_WRITER')")
+    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_WRITER')")
     @DeleteMapping("/{postId}")
     public ResponseEntity<Void> deletePostById(@PathVariable(value = "postId") UUID postId){
         postService.deletePostById(postId);
         return ResponseEntity.noContent().build();
     }
-    @PreAuthorize("hasRole('ROLE_ADMIN', 'ROLE_WRITER')")
+    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_WRITER')")
     @PutMapping("/{postId}")
     public ResponseEntity<PostDTO> updatePostById(@PathVariable(value = "postId") UUID postId, @RequestBody UpdatePostDTO postDTO) {
         return ResponseEntity.ok(postService.updatePostById(postId, postDTO));
