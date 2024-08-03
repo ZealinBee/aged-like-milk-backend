@@ -56,7 +56,7 @@ public class AuthService implements IAuthService {
 
         var user = userRepo.findOneByEmail(loginDTO.getEmail()).orElseThrow(() -> new Exception("User not found"));
         var tokens = new TokensDTO();
-        tokens.accessToken = jwtService.generateToken(user);
+        tokens.accessToken = jwtService.generateToken(user, user.getId());
         return tokens;
     }
 

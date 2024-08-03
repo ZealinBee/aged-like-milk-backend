@@ -10,9 +10,13 @@ public class GetCommentDTO {
     private UUID userId;
     private UUID parentCommentId;
     private Date createdDate;
+    private int nestingLevel;
+    private int likes;
+    private int dislikes;
 
     public GetCommentDTO() {
     }
+
 
     public UUID getId() {
         return this.id;
@@ -38,6 +42,18 @@ public class GetCommentDTO {
         return this.createdDate;
     }
 
+    public int getNestingLevel() {
+        return this.nestingLevel;
+    }
+
+    public int getLikes() {
+        return this.likes;
+    }
+
+    public int getDislikes() {
+        return this.dislikes;
+    }
+
     public void setId(UUID id) {
         this.id = id;
     }
@@ -60,6 +76,18 @@ public class GetCommentDTO {
 
     public void setCreatedDate(Date createdDate) {
         this.createdDate = createdDate;
+    }
+
+    public void setNestingLevel(int nestingLevel) {
+        this.nestingLevel = nestingLevel;
+    }
+
+    public void setLikes(int likes) {
+        this.likes = likes;
+    }
+
+    public void setDislikes(int dislikes) {
+        this.dislikes = dislikes;
     }
 
     public boolean equals(final Object o) {
@@ -87,6 +115,9 @@ public class GetCommentDTO {
         final Object other$createdDate = other.getCreatedDate();
         if (this$createdDate == null ? other$createdDate != null : !this$createdDate.equals(other$createdDate))
             return false;
+        if (this.getNestingLevel() != other.getNestingLevel()) return false;
+        if (this.getLikes() != other.getLikes()) return false;
+        if (this.getDislikes() != other.getDislikes()) return false;
         return true;
     }
 
@@ -109,10 +140,13 @@ public class GetCommentDTO {
         result = result * PRIME + ($parentCommentId == null ? 43 : $parentCommentId.hashCode());
         final Object $createdDate = this.getCreatedDate();
         result = result * PRIME + ($createdDate == null ? 43 : $createdDate.hashCode());
+        result = result * PRIME + this.getNestingLevel();
+        result = result * PRIME + this.getLikes();
+        result = result * PRIME + this.getDislikes();
         return result;
     }
 
     public String toString() {
-        return "GetCommentDTO(id=" + this.getId() + ", postId=" + this.getPostId() + ", content=" + this.getContent() + ", userId=" + this.getUserId() + ", parentCommentId=" + this.getParentCommentId() + ", createdDate=" + this.getCreatedDate() + ")";
+        return "GetCommentDTO(id=" + this.getId() + ", postId=" + this.getPostId() + ", content=" + this.getContent() + ", userId=" + this.getUserId() + ", parentCommentId=" + this.getParentCommentId() + ", createdDate=" + this.getCreatedDate() + ", nestingLevel=" + this.getNestingLevel() + ", likes=" + this.getLikes() + ", dislikes=" + this.getDislikes() + ")";
     }
 }

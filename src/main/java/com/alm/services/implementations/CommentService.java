@@ -33,9 +33,10 @@ public class CommentService implements ICommentService {
     }
 
     @Override
-    public GetCommentDTO createComment(CreateCommentDTO createCommentDTO) {
+    public GetCommentDTO createComment(CreateCommentDTO createCommentDTO, UUID userId) {
         Post post = validatePost(createCommentDTO.getPostId());
-        User user = validateUser(createCommentDTO.getUserId());
+        System.out.println("HELLO" + userId);
+        User user = validateUser(userId);
         var comment = new Comment();
         comment.setContent(createCommentDTO.getContent());
         comment.setPost(post);
@@ -46,7 +47,7 @@ public class CommentService implements ICommentService {
             if(parentComment.getNestingLevel() > 2) {
                 throw new CustomRunTimeException("400", HttpStatus.BAD_REQUEST, "The nesting level is too deep for the comment");
             }
-            comment.setParentCommentId(parentComment.getParentCommentId());
+            comment.setParentCommentId(parentComment.getId());
             comment.setNestingLevel(parentComment.getNestingLevel() + 1);
         }
 
@@ -65,13 +66,51 @@ public class CommentService implements ICommentService {
     }
 
     @Override
-    public GetCommentDTO likeComment(UUID commentId) {
-        return null;
+    public GetCommentDTO likeComment(UUID commentId, UUID userId) {
+        Comment comment = commentRepo.findById(commentId)
+                .orElseThrow(() -> new CustomRunTimeException("404", HttpStatus.NOT_FOUND, "The comment ID doesn't exist"));
+        User user = validateUser(userId);
+        // if the user has already liked the comment, remove the like
+        if(user.getLikedComments().contains(comment.getId())) {
+            user.getLikedComments().remove(comment.getId());
+            comment.setLikes(comment.getLikes() - 1);
+        } else {
+            user.getLikedComments().add(comment.getId());
+            comment.setLikes(comment.getLikes() + 1);
+        }
+        // if the user has disliked the comment, remove the dislike
+        if(user.getDislikedComments().contains(comment.getId())) {
+            user.getDislikedComments().remove(comment.getId());
+            comment.setDislikes(comment.getDislikes() - 1);
+        }
+
+        commentRepo.save(comment);
+        userRepo.save(user);
+        return commentMapper.commentToGetCommentDTO(comment);
     }
 
+
     @Override
-    public GetCommentDTO dislikeComment(UUID commentId) {
-        return null;
+    public GetCommentDTO dislikeComment(UUID commentId, UUID userId) {
+        Comment comment = commentRepo.findById(commentId)
+                .orElseThrow(() -> new CustomRunTimeException("404", HttpStatus.NOT_FOUND, "The comment ID doesn't exist"));
+        User user = validateUser(userId);
+        // if the user has already disliked the comment, remove the dislike
+        if(user.getDislikedComments().contains(comment.getId())) {
+            user.getDislikedComments().remove(comment.getId());
+            comment.setDislikes(comment.getDislikes() - 1);
+        }else {
+            user.getDislikedComments().add(comment.getId());
+            comment.setDislikes(comment.getDislikes() + 1);
+        }
+        // if the user has liked the comment, remove the like
+        if(user.getLikedComments().contains(comment.getId())) {
+            user.getLikedComments().remove(comment.getId());
+            comment.setLikes(comment.getLikes() - 1);
+        }
+        commentRepo.save(comment);
+        userRepo.save(user);
+        return commentMapper.commentToGetCommentDTO(comment);
     }
 
     public User validateUser(UUID userId) {
