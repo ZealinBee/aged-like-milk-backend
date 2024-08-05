@@ -2,20 +2,13 @@ package com.alm.dtos.posts;
 
 import java.util.UUID;
 
-public class PostDTO {
+public class CreatePostDTO {
     private String title;
     private String content;
     private UUID categoryId;
     private UUID userId;
 
-    public PostDTO() {
-    }
-
-    public PostDTO(String title, String content, UUID categoryId, UUID userId) {
-        this.title = title;
-        this.content = content;
-        this.categoryId = categoryId;
-        this.userId = userId;
+    public CreatePostDTO() {
     }
 
     public String getTitle() {
@@ -52,8 +45,8 @@ public class PostDTO {
 
     public boolean equals(final Object o) {
         if (o == this) return true;
-        if (!(o instanceof PostDTO)) return false;
-        final PostDTO other = (PostDTO) o;
+        if (!(o instanceof CreatePostDTO)) return false;
+        final CreatePostDTO other = (CreatePostDTO) o;
         if (!other.canEqual((Object) this)) return false;
         final Object this$title = this.getTitle();
         final Object other$title = other.getTitle();
@@ -72,7 +65,7 @@ public class PostDTO {
     }
 
     protected boolean canEqual(final Object other) {
-        return other instanceof PostDTO;
+        return other instanceof CreatePostDTO;
     }
 
     public int hashCode() {
@@ -90,6 +83,6 @@ public class PostDTO {
     }
 
     public String toString() {
-        return "PostDTO(title=" + this.getTitle() + ", content=" + this.getContent() + ", categoryId=" + this.getCategoryId() + ", userId=" + this.getUserId() + ")";
+        return "CreatePostDTO(title=" + this.getTitle() + ", content=" + this.getContent() + ", categoryId=" + this.getCategoryId() + ", userId=" + this.getUserId() + ")";
     }
 }

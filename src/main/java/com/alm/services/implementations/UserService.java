@@ -36,7 +36,7 @@ public class UserService implements IUserService {
         Page<User> users = userRepo.findAll(pageable);
         List<User> usersList = users.getContent();
         List<GetUserDTO> mappedUsers = usersList.stream()
-                .map(userMapper::userToUserDTO).toList();
+                .map(userMapper::userToGetUserDTO).toList();
 
         UsersPaginationDTO usersPaginationDTO = new UsersPaginationDTO(
                 users.getNumber(),
@@ -52,7 +52,7 @@ public class UserService implements IUserService {
 
     public GetUserDTO findUserById(UUID userId) throws CustomRunTimeException{
         User user = userRepo.findById(userId).orElseThrow(() -> new CustomRunTimeException("404", HttpStatus.NOT_FOUND, "User Id was not found"));
-        return userMapper.userToUserDTO(user);
+        return userMapper.userToGetUserDTO(user);
     }
 
 
@@ -63,7 +63,7 @@ public class UserService implements IUserService {
         user.setPassword(createUserDTO.getPassword());
         userRepo.save(user);
 
-        return userMapper.userToUserDTO(user);
+        return userMapper.userToGetUserDTO(user);
     }
 
     @Override

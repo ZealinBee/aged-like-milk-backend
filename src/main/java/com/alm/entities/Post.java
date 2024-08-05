@@ -2,11 +2,11 @@ package com.alm.entities;
 
 import jakarta.persistence.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @Entity
 @Table(name = "posts")
-
 public class Post {
     @Id
     @GeneratedValue(generator = "uuid2")
@@ -27,16 +27,9 @@ public class Post {
     @Column(nullable = false)
     private String content;
 
-    public Post(UUID id, String title, User user, Category category, String content) {
-        this.id = id;
-        this.title = title;
-        this.user = user;
-        this.category = category;
-        this.content = content;
-    }
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "post")
+    private List<Comment> comments;
 
-    public Post() {
-    }
 
     public UUID getId() {
         return this.id;
@@ -58,6 +51,10 @@ public class Post {
         return this.content;
     }
 
+    public List<Comment> getComments() {
+        return this.comments;
+    }
+
     public void setId(UUID id) {
         this.id = id;
     }
@@ -76,5 +73,9 @@ public class Post {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public void setComments(List<Comment> comments) {
+        this.comments = comments;
     }
 }

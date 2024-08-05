@@ -45,7 +45,7 @@ public class AuthService implements IAuthService {
         newUser.setEmail(registerDTO.getEmail());
         userRepo.save(newUser);
 
-        return userMapper.userToUserDTO(newUser);
+        return userMapper.userToGetUserDTO(newUser);
     }
 
     public TokensDTO login(LoginDTO loginDTO) throws Exception {

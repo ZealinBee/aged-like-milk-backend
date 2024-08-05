@@ -1,18 +1,15 @@
 package com.alm.controllers;
 
 import com.alm.dtos.paginations.PostsPaginationDTO;
-import com.alm.dtos.posts.PostDTO;
+import com.alm.dtos.posts.CreatePostDTO;
+import com.alm.dtos.posts.GetPostDTO;
 import com.alm.dtos.posts.UpdatePostDTO;
-import com.alm.entities.Post;
 import com.alm.services.abstractions.IPostService;
-import org.apache.coyote.Response;
-import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -26,8 +23,8 @@ public class PostController {
 
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_WRITER')")
     @PostMapping
-    public ResponseEntity<PostDTO> createPost(@RequestBody PostDTO postDTO) {
-        var post = postService.createPost(postDTO);
+    public ResponseEntity<GetPostDTO> createPost(@RequestBody CreatePostDTO getPostDTO) {
+        var post = postService.createPost(getPostDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(post);
     }
 
@@ -40,7 +37,7 @@ public class PostController {
     }
 
     @GetMapping("/{postId}")
-    public ResponseEntity<PostDTO> findPostById(@PathVariable(value = "postId") UUID postId) {
+    public ResponseEntity<GetPostDTO> findPostById(@PathVariable(value = "postId") UUID postId) {
         return ResponseEntity.ok(postService.findPostById(postId));
     }
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_WRITER')")
@@ -51,7 +48,7 @@ public class PostController {
     }
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_WRITER')")
     @PutMapping("/{postId}")
-    public ResponseEntity<PostDTO> updatePostById(@PathVariable(value = "postId") UUID postId, @RequestBody UpdatePostDTO postDTO) {
+    public ResponseEntity<GetPostDTO> updatePostById(@PathVariable(value = "postId") UUID postId, @RequestBody UpdatePostDTO postDTO) {
         return ResponseEntity.ok(postService.updatePostById(postId, postDTO));
     }
 

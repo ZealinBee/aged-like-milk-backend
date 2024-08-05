@@ -8,8 +8,8 @@ import java.util.UUID;
 
 public interface ICommentService {
     GetCommentDTO createComment(CreateCommentDTO createCommentDTO, UUID userId);
-    List<GetCommentDTO> findAllCommentsByPostId(UUID postId);
-    void deleteCommentById(UUID commentId);
     GetCommentDTO likeComment(UUID commentId, UUID userId);
     GetCommentDTO dislikeComment(UUID commentId, UUID userId);
+    void deleteCommentById(UUID commentId);
+    List<GetCommentDTO> getCommentsByPostId(UUID postId);
 }

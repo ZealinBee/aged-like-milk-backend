@@ -5,6 +5,7 @@ import com.alm.dtos.comments.GetCommentDTO;
 import com.alm.services.abstractions.ICommentService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -36,6 +37,10 @@ public class CommentController {
         return ResponseEntity.ok(commentService.dislikeComment(commentId, userId));
     }
 
-
-
+    @PreAuthorize("hasRole('ADMIN')")
+    @DeleteMapping("/{commentId}")
+    public ResponseEntity<Void> deleteComment(@PathVariable UUID commentId) {
+        commentService.deleteCommentById(commentId);
+        return ResponseEntity.noContent().build();
+    }
 }

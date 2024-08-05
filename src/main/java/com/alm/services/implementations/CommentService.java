@@ -55,14 +55,22 @@ public class CommentService implements ICommentService {
         return commentMapper.commentToGetCommentDTO(savedComment);
     }
 
-    @Override
-    public List<GetCommentDTO> findAllCommentsByPostId(UUID postId) {
-        return null;
-    }
 
     @Override
     public void deleteCommentById(UUID commentId) {
+        Comment comment = commentRepo.findById(commentId)
+                .orElseThrow(() -> new CustomRunTimeException("404", HttpStatus.NOT_FOUND, "The comment ID doesn't exist"));
+        // TODO: figure out a recursive way to delete all the children comments
+        commentRepo.delete(comment);
+    }
 
+    @Override
+    public List<GetCommentDTO> getCommentsByPostId(UUID postId) {
+        Post post = validatePost(postId);
+        List<Comment> comments = commentRepo.findAllByPostId(postId);
+        return comments.stream()
+                .map(commentMapper::commentToGetCommentDTO)
+                .toList();
     }
 
     @Override
@@ -122,5 +130,7 @@ public class CommentService implements ICommentService {
         return postRepo.findById(postId)
                 .orElseThrow(() -> new CustomRunTimeException("404", HttpStatus.NOT_FOUND, "The post ID doesn't exist"));
     }
+
+
 
 }
