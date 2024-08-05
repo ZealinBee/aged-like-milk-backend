@@ -1,16 +1,12 @@
 package com.alm.dtos.auth;
 
 public class RegisterDTO {
-    public String username;
     public String email;
     public String password;
 
     public RegisterDTO() {
     }
 
-    public String getUsername() {
-        return this.username;
-    }
 
     public String getEmail() {
         return this.email;
@@ -18,10 +14,6 @@ public class RegisterDTO {
 
     public String getPassword() {
         return this.password;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
     }
 
     public void setEmail(String email) {
@@ -37,9 +29,6 @@ public class RegisterDTO {
         if (!(o instanceof RegisterDTO)) return false;
         final RegisterDTO other = (RegisterDTO) o;
         if (!other.canEqual((Object) this)) return false;
-        final Object this$username = this.getUsername();
-        final Object other$username = other.getUsername();
-        if (this$username == null ? other$username != null : !this$username.equals(other$username)) return false;
         final Object this$email = this.getEmail();
         final Object other$email = other.getEmail();
         if (this$email == null ? other$email != null : !this$email.equals(other$email)) return false;
@@ -56,8 +45,6 @@ public class RegisterDTO {
     public int hashCode() {
         final int PRIME = 59;
         int result = 1;
-        final Object $username = this.getUsername();
-        result = result * PRIME + ($username == null ? 43 : $username.hashCode());
         final Object $email = this.getEmail();
         result = result * PRIME + ($email == null ? 43 : $email.hashCode());
         final Object $password = this.getPassword();
@@ -66,6 +53,6 @@ public class RegisterDTO {
     }
 
     public String toString() {
-        return "RegisterDTO(username=" + this.getUsername() + ", email=" + this.getEmail() + ", password=" + this.getPassword() + ")";
+        return "RegisterDTO(email=" + this.getEmail() + ", password=" + this.getPassword() + ")";
     }
 }
